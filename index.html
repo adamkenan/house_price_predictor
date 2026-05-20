@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>House Price Predictor</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>House Price Predictor</h1>
+
+    <p class="subtitle">
+        Enter the house parameters below.
+    </p>
+
+    <form action="/predict" method="POST">
+
+        <div class="grid">
+
+            <!-- DROPDOWNS -->
+            {% for feature, options in categorical_options.items() %}
+
+            <div class="input-group">
+
+                <label>{{ feature }}</label>
+
+                <select name="{{ feature }}">
+
+                    {% for option in options %}
+                    <option value="{{ option }}">
+                        {{ option }}
+                    </option>
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            {% endfor %}
+
+            <!-- NUMERIC -->
+            {% for feature in numeric_features %}
+
+            <div class="input-group">
+
+                <label>{{ feature }}</label>
+
+                <input
+                    type="number"
+                    step="any"
+                    name="{{ feature }}"
+                   placeholder="Enter {{ feature }}"
+                >
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <button type="submit">
+            Predict Price
+        </button>
+
+    </form>
+
+    {% if prediction %}
+
+    <div class="result">
+
+        <h2>Predicted Price</h2>
+
+        <div class="price">
+            {{ prediction }}
+        </div>
+
+        <p>
+            Estimated Range:
+            <strong>{{ lower }}</strong>
+            to
+            <strong>{{ upper }}</strong>
+        </p>
+
+    </div>
+
+    {% endif %}
+
+    {% if error %}
+
+    <div class="error">
+        <strong>Error:</strong> {{ error }}
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
